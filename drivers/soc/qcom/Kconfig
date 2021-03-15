@@ -981,3 +981,9 @@ config ICNSS_QMI
 	  over QMI channel.
 
 source "drivers/soc/qcom/wcnss/Kconfig"
+
+config DEBUG_POLICY_STATUS
+	bool "read debug policy status"
+	default y
+	help
+	  This driver read debug policy status using Qualcomm scm_call2 interface
