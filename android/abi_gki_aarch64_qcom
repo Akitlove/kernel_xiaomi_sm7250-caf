@@ -693,7 +693,6 @@
   printk
   print_stack_trace
   proc_dointvec
-  proc_mkdir_data
   proto_register
   proto_unregister
   pskb_expand_head
@@ -1191,7 +1190,7 @@
 # required by cnss_prealloc.ko
   save_stack_trace
 
-# required by coresight-clk-amba-dummy.ko
+# required by coresight-clk-amba-placeholder.ko
   amba_driver_register
   amba_driver_unregister
 
@@ -1320,6 +1319,7 @@
 # required by ftm5.ko
   ktime_get_coarse_real_ts64
   proc_create
+  proc_mkdir_data
   seq_write
 
 # required by google-battery.ko
@@ -1366,11 +1366,13 @@
   i2c_put_dma_safe_msg_buf
 
 # required by incrementalfs.ko
+  __audit_inode_child
   __break_lease
   clear_inode
   __close_fd
   crc32_le
   d_add
+  d_delete
   d_drop
   deactivate_locked_super
   dentry_open
@@ -1378,13 +1380,19 @@
   d_instantiate
   d_make_root
   dput
+  filemap_fault
+  filemap_map_pages
+  filemap_page_mkwrite
   flush_dcache_page
   fs_kobj
+  fsnotify
+  __fsnotify_parent
   fsstack_copy_attr_all
+  __fsverity_verify_signature
   generic_file_llseek
-  generic_file_mmap
   generic_file_read_iter
   generic_file_splice_read
+  generic_fillattr
   generic_read_dir
   generic_shutdown_super
   get_zeroed_page
@@ -1392,18 +1400,24 @@
   ihold
   inode_init_once
   inode_init_owner
+  inode_set_flags
   iput
   iterate_dir
   kernel_read
   kernel_write
   kern_path
+  kobject_add
+  kobject_init
+  kobj_sysfs_ops
   __ll_sc___cmpxchg_case_rel_8
   lockref_get
   lock_rename
   lookup_one_len
   LZ4_decompress_safe
   match_int
+  match_strdup
   match_token
+  memchr_inv
   noop_llseek
   notify_change
   pagecache_get_page
@@ -1413,11 +1427,11 @@
   register_filesystem
   set_anon_super
   sget
-  simple_getattr
   simple_setattr
   simple_statfs
   strndup_user
   sync_filesystem
+  touch_atime
   truncate_inode_pages
   unlock_new_inode
   unlock_page
@@ -1434,6 +1448,7 @@
   vfs_rename
   vfs_rmdir
   vfs_setxattr
+  vfs_truncate
   vfs_unlink
 
 # required by ion-alloc.ko
@@ -2818,6 +2833,8 @@
 
 # preserved by --additions-only
   crc32_le
+  generic_file_mmap
+  simple_getattr
   simple_strtoull
   soc_find_component
   vm_map_ram
