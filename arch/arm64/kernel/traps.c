@@ -167,6 +167,11 @@ void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk)
 			printk("The task:%s is running on other cpu currently!\n", tsk->comm);
 			break;
 		}
+		/* do not dump_backtrace current task on other cpu, frame is the last info */
+		if (tsk != current && tsk->on_cpu == 1) {
+			printk("The task:%s is running on other cpu currently!\n", tsk->comm);
+			break;
+		}
 		/* skip until specified stack frame */
 		if (!skip) {
 			dump_backtrace_entry(frame.pc);
