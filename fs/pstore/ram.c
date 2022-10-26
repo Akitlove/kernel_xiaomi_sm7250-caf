@@ -969,7 +969,7 @@ static void __init ramoops_register_dummy(void)
 	}
 }
 
-static struct ramoops_platform_data ramoops_data;
+struct ramoops_platform_data ramoops_data;
 
 static struct platform_device ramoops_dev  = {
 	.name = "ramoops",
