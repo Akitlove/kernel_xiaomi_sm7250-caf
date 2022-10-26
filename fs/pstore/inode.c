@@ -307,16 +307,16 @@ static char *console_buffer;
 static ssize_t console_bufsize;
 
 static ssize_t last_kmsg_read(struct file *file, char __user *buf,
-                              size_t len, loff_t *offset)
+		size_t len, loff_t *offset)
 {
 	return simple_read_from_buffer(buf, len, offset,
-                                       console_buffer, console_bufsize);
+			console_buffer, console_bufsize);
 }
 
 static const struct file_operations last_kmsg_fops = {
-    .owner          = THIS_MODULE,
-    .read           = last_kmsg_read,
-    .llseek         = default_llseek,
+	.owner          = THIS_MODULE,
+	.read           = last_kmsg_read,
+	.llseek         = default_llseek,
 };
 #endif
 
@@ -533,11 +533,11 @@ int __init pstore_init_fs(void)
 
 #ifdef CONFIG_PSTORE_LAST_KMSG
 	last_kmsg_entry = proc_create_data("last_kmsg", S_IFREG | S_IRUGO,
-                                       NULL, &last_kmsg_fops, NULL);
+			NULL, &last_kmsg_fops, NULL);
 	if (!last_kmsg_entry) {
 		pr_err("Failed to create last_kmsg\n");
 		goto out;
-    }
+	}
 #endif
 out:
 	return err;
