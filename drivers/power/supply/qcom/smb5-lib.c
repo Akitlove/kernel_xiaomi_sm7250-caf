@@ -6031,10 +6031,6 @@ int smblib_set_prop_pd_active(struct smb_charger *chg,
 		vote(chg->usb_icl_votable, PD_VERIFED_VOTER, true, PD_UNVERIFED_CURRENT);
 #ifdef CONFIG_SMB1398_CHARGER
 		schedule_delayed_work(&chg->pps_monitor_work, HZ);
-		if (chg->pd_active == POWER_SUPPLY_PD_PPS_ACTIVE)
-			vote(chg->fcc_votable, PD_VOTER, true, PD3_FCC_UA);
-		else if (chg->pd_active == POWER_SUPPLY_PD_ACTIVE)
-			vote(chg->fcc_votable, PD_VOTER, true, PD2_FCC_UA);
 		if (chg->cp_disable_votable)
 			vote(chg->cp_disable_votable, PD_VOTER, false, 0);
 		chg->usbin_collapse_pps_active = 0;
@@ -7532,8 +7528,6 @@ static int qc3p5_authenticate(struct smb_charger *chg)
 				HVDCP3p5_40W_CURRENT_UA);
 
 #ifdef CONFIG_SMB1398_CHARGER
-	alarm_start_relative(&chg->super_charger_alarm,
-				ms_to_ktime(SUPER_CHARGER_DELAY_MS));
 	schedule_work(&chg->super_charger_mode);
 	chg->super_charger_check_count = 0;
 #endif
@@ -10166,7 +10160,6 @@ static void smblib_super_charger_mode(struct work_struct *work)
 {
 	struct smb_charger *chg = container_of(work, struct smb_charger,
 			super_charger_mode);
-	int super_charger_time = SUPER_CHARGER_DELAY_MS;
 	union power_supply_propval pval = {0, };
 	int rc, capacity_now;
 
@@ -10175,20 +10168,8 @@ static void smblib_super_charger_mode(struct work_struct *work)
 		smblib_err(chg, "Couldn't get batt capacity rc=%d\n", rc);
 	capacity_now = pval.intval;
 
-	if ((capacity_now >= 20) ||
-		(chg->super_charger_check_count > SUPER_CHARGER_COUNT)) {
-		chg->super_charger_check_count = 0;
-		vote(chg->fcc_votable, FCC_MAX_QC3P5_VOTER, true,
-			HVDCP3p5_NORMAL_CURRENT_UA);
-		alarm_cancel(&chg->super_charger_alarm);
-		pm_relax(chg->dev);
-		return;
-	}
-
 	pr_err("******smblib_super_charger_mode: super charger mode count = %d*********\n", chg->super_charger_check_count);
 	chg->super_charger_check_count++;
-	alarm_start_relative(&chg->super_charger_alarm,
-				ms_to_ktime(super_charger_time));
 	pm_relax(chg->dev);
 	//schedule_work(&chg->super_charger_mode);
 }
