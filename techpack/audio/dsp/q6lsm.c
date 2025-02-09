@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2013-2020, Linux Foundation. All rights reserved.
+ * Copyright (C) 2021 XiaoMi, Inc.
  */
 #include <linux/fs.h>
 #include <linux/mutex.h>
@@ -2436,6 +2437,7 @@ int q6lsm_get_one_param(struct lsm_client *client,
 {
 	struct param_hdr_v3 param_info;
 	int rc = 0;
+	bool iid_supported = q6common_is_instance_id_supported();
 
 	memset(&param_info, 0, sizeof(param_info));
 
@@ -2444,7 +2446,12 @@ int q6lsm_get_one_param(struct lsm_client *client,
 		param_info.module_id = p_info->module_id;
 		param_info.instance_id = p_info->instance_id;
 		param_info.param_id = p_info->param_id;
-		param_info.param_size = p_info->param_size + sizeof(param_info);
+
+		if (iid_supported)
+			param_info.param_size = p_info->param_size + sizeof(struct param_hdr_v3);
+		else
+			param_info.param_size = p_info->param_size + sizeof(struct param_hdr_v2);
+
 		rc = q6lsm_get_params(client, NULL, &param_info);
 		if (rc) {
 			pr_err("%s: LSM_GET_CUSTOM_PARAMS failed, rc %d\n",
