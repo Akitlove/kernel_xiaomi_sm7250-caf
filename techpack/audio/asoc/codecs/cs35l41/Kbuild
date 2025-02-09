@@ -86,11 +86,11 @@ INCS +=		$(COMMON_INC) \
 
 EXTRA_CFLAGS += $(INCS)
 
-ifeq ($(CONFIG_MACH_XIAOMI_MONET), y)
+ifeq ($(TARGET_PRODUCT), monet)
 	CDEFINES += -DCONFIG_TARGET_PRODUCT_MONET
 endif
 
-ifeq ($(CONFIG_MACH_XIAOMI_VANGOGH), y)
+ifeq ($(TARGET_PRODUCT), vangogh)
 	CDEFINES += -DCONFIG_TARGET_PRODUCT_VANGOGH
 endif
 
@@ -131,5 +131,4 @@ endif
 obj-$(CONFIG_SND_SOC_CS35L41) += cs35l41_dlkm.o
 cs35l41_dlkm-y := $(CS35L41_OBJS)
 
-# inject some build related information
-DEFINES += -DBUILD_TIMESTAMP=\"$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')\"
+
