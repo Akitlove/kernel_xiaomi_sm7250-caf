@@ -358,4 +358,25 @@ config ARCH_ZYNQMP
 	help
 	  This enables support for Xilinx ZynqMP Family
 
+config MACH_XIAOMI
+	bool "Xiaomi Family"
+	depends on ARCH_QCOM
+	help
+	  This enables support for Xiaomi Family
+config MACH_XIAOMI_MONET
+	bool "Monet Platform"
+	select MACH_XIAOMI
+	help
+	  This enables support for Xiaomi Mi 10 Lite
+config MACH_XIAOMI_PICASSO
+	bool "Picasso Platform"
+	select MACH_XIAOMI
+	help
+	  This enables support for Xiaomi Redmi k30 5G
+config MACH_XIAOMI_VANGOGH
+	bool "Vangogh Platform"
+	select MACH_XIAOMI
+	help
+	  This enables support for Xiaomi Mi 10 Lite Zoom
+
 endmenu
