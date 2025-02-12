@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /* Copyright (c) 2016-2020, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #include <linux/init.h>
@@ -217,7 +218,7 @@ static int msm_pcm_open(struct snd_pcm_substream *substream)
 			SIO_PLAYBACK_MIN_BYTES,
 			SIO_PLAYBACK_MAX_BYTES);
 		if (ret) {
-			pr_info("%s: P buffer bytes minmax constraint ret %d\n",
+			pr_debug("%s: P buffer bytes minmax constraint ret %d\n",
 			       __func__, ret);
 		}
 	} else if (substream->stream == SNDRV_PCM_STREAM_CAPTURE) {
@@ -226,7 +227,7 @@ static int msm_pcm_open(struct snd_pcm_substream *substream)
 			   SIO_CAPTURE_MIN_BYTES,
 			   SIO_CAPTURE_MAX_BYTES);
 		if (ret) {
-			pr_info("%s: C buffer bytes minmax constraint ret %d\n",
+			pr_debug("%s: C buffer bytes minmax constraint ret %d\n",
 			       __func__, ret);
 		}
 	}
