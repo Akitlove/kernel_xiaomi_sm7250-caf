@@ -319,6 +319,15 @@ struct smq_invoke_rsp {
 	int retval;	             /* invoke return value */
 };
 
+enum fastrpc_process_create_state {
+	/* Process is not created */
+	PROCESS_CREATE_DEFAULT			= 0,
+	/* Process creation is in progress */
+	PROCESS_CREATE_IS_INPROGRESS	= 1,
+	/* Process creation is successful */
+	PROCESS_CREATE_SUCCESS			= 2,
+};
+
 enum fastrpc_response_flags {
 	NORMAL_RESPONSE = 0,
 	EARLY_RESPONSE = 1,
@@ -349,5 +358,21 @@ static inline struct smq_phy_page *smq_phy_page_start(uint32_t sc,
 
 	return (struct smq_phy_page *)(&buf[nTotal]);
 }
+
+enum fastrpc_proc_attr {
+	/* Macro for Debug attr */
+	FASTRPC_MODE_DEBUG				= 1 << 0,
+	/* Macro for Ptrace */
+	FASTRPC_MODE_PTRACE				= 1 << 1,
+	/* Macro for CRC Check */
+	FASTRPC_MODE_CRC				= 1 << 2,
+	/* Macro for Unsigned PD */
+	FASTRPC_MODE_UNSIGNED_MODULE	= 1 << 3,
+	/* Macro for Adaptive QoS */
+	FASTRPC_MODE_ADAPTIVE_QOS		= 1 << 4,
+	/* Macro for System Process */
+	FASTRPC_MODE_SYSTEM_PROCESS		= 1 << 5,
+
+};
 
 #endif
