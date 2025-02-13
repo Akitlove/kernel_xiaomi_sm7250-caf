@@ -237,6 +237,7 @@ EXPORT_SYMBOL(strscpy);
 #endif
 
 #ifndef __HAVE_ARCH_STPCPY
+
 /**
  * stpcpy - copy a string from src to dest returning a pointer to the new end
  *          of dest, including src's %NUL-terminator. May overrun dest.
