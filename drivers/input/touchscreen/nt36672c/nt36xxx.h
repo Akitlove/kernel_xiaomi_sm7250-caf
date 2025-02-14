@@ -36,7 +36,6 @@
 #define PINCTRL_STATE_ACTIVE		"pmx_ts_active"
 #define PINCTRL_STATE_SUSPEND		"pmx_ts_suspend"
 #define PINCTRL_STATE_RELEASE		"pmx_ts_release"
-#define MI_DRM_NOTIFIER
 
 #define NVT_DEBUG 1
 
@@ -135,11 +134,7 @@ struct nvt_ts_data {
 	uint16_t addr;
 	int8_t phys[32];
 
-#ifdef MI_DRM_NOTIFIER
 	struct notifier_block drm_notif;
-#else
-	struct notifier_block fb_notif;
-#endif
 
 	uint8_t fw_ver;
 	uint8_t x_num;
