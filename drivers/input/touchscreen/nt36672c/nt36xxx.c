@@ -1172,7 +1172,7 @@ static bool nvt_cmds_panel_info(void)
 			   sizeof(display_node) - 1);
 		NVT_LOG("%s: display_node is %s\n", __func__, display_node);
 		if (!strncmp(display_node, "qcom,mdss_dsi_g7a_36_02_0c_dsc_video",
-			strlen("qcom,mdss_dsi_g7a_37_02_0a_dsc_video"))){
+			strlen("qcom,mdss_dsi_g7a_36_02_0a_dsc_video"))){
 			panel_id = true;
 			}else{
 				memcpy(display_node, (match + strlen("msm_drm.dsi_display0=")),
@@ -2057,6 +2057,8 @@ static int32_t nvt_ts_probe(struct platform_device *pdev)
 		NVT_ERR("register drm_notifier failed. ret=%d\n", ret);
 		goto err_register_drm_notif_failed;
 	}
+
+	nvt_cmds_panel_info();
 
 	bTouchIsAwake = 1;
 	NVT_LOG("end\n");
