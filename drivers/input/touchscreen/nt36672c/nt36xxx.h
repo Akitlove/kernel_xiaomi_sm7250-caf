@@ -176,9 +176,6 @@ struct nvt_ts_data {
 	/*bit map indicate which slot(0~9) has been used*/
 	unsigned long slot_map[BITS_TO_LONGS(10)];
 	bool fw_debug;
-#ifdef CONFIG_TOUCHSCREEN_NVT_DEBUG_FS
-	struct dentry *debugfs;
-#endif
 	struct workqueue_struct *event_wq;
 	struct work_struct suspend_work;
 	struct work_struct resume_work;
@@ -189,7 +186,6 @@ struct nvt_ts_data {
 	struct completion dev_pm_suspend_completion;
 	bool palm_sensor_changed;
 	bool rf_resist_cmd_waiting;
-	uint8_t debug_flag;
 };
 
 #if NVT_TOUCH_PROC
@@ -248,7 +244,6 @@ int32_t nvt_clear_fw_status(void);
 int32_t nvt_check_fw_status(void);
 int32_t nvt_set_page(uint32_t addr);
 int32_t nvt_write_addr(uint32_t addr, uint8_t data);
-void nvt_set_dbgfw_status(bool enable);
 bool nvt_get_dbgfw_status(void);
 void nvt_match_fw(void);
 #if NVT_TOUCH_ESD_PROTECT
