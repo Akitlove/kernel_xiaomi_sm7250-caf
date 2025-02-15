@@ -1160,6 +1160,41 @@ static int32_t nvt_parse_dt(struct device *dev)
 }
 #endif
 
+static bool nvt_cmds_panel_info(void)
+{
+	bool panel_id = false;
+	char display_node[37] = {'\0'};
+	char *match = (char *) strnstr(saved_command_line,
+								   "msm_drm.dsi_display0=",
+								strlen(saved_command_line));
+	if (match) {
+		memcpy(display_node, (match + strlen("msm_drm.dsi_display0=")),
+			   sizeof(display_node) - 1);
+		NVT_LOG("%s: display_node is %s\n", __func__, display_node);
+		if (!strncmp(display_node, "qcom,mdss_dsi_g7a_36_02_0c_dsc_video",
+			strlen("qcom,mdss_dsi_g7a_37_02_0a_dsc_video"))){
+			panel_id = true;
+			}else{
+				memcpy(display_node, (match + strlen("msm_drm.dsi_display0=")),
+					   sizeof(display_node) - 1);
+				NVT_LOG("%s: display_node is %s\n", __func__, display_node);
+		    if (!strncmp(display_node, "qcom,mdss_dsi_g7a_37_02_0a_dsc_video",
+			strlen("qcom,mdss_dsi_g7a_37_02_0a_dsc_video"))){
+			panel_id = true;
+		    }else{
+				memcpy(display_node, (match + strlen("msm_drm.dsi_display0=")),
+					   sizeof(display_node) - 1);
+				NVT_LOG("%s: display_node is %s\n", __func__, display_node);
+		    if (!strncmp(display_node, "qcom,mdss_dsi_g7a_37_02_0b_dsc_video",
+		    strlen("qcom,mdss_dsi_g7a_37_02_0b_dsc_video"))){
+			panel_id = true;
+		        }
+		    }
+	    }
+	}
+	return panel_id;
+}
+
 static int nvt_get_panel_type(struct nvt_ts_data *ts_data)
 {
 	int i;
