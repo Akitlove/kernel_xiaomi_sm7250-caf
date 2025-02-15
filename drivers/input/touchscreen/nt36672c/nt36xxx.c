@@ -2071,6 +2071,8 @@ static int32_t nvt_ts_probe(struct platform_device *pdev)
 		goto err_register_drm_notif_failed;
 	}
 
+	nvt_cmds_panel_info();
+
 	bTouchIsAwake = 1;
 	NVT_LOG("end\n");
 

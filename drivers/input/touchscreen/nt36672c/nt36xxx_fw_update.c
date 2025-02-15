@@ -301,6 +301,8 @@ static void update_firmware_release(void)
 
 int touch_fw_override = 0;
 char *touch_fw_name = "novatek_nt36672c_g7a_fw01.bin";
+int panel_is_tianma = 0;
+
 static void update_firmware_override(int choice) {
 	switch (choice) {
 		case 1:  touch_fw_name = "novatek_nt36672c_g7a_fw01.bin"; break;
