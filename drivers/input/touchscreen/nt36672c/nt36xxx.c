@@ -77,7 +77,6 @@ extern void Boot_Update_Firmware(struct work_struct *work);
 static int nvt_drm_notifier_callback(struct notifier_block *self, unsigned long event, void *data);
 static int32_t nvt_ts_suspend(struct device *dev);
 static int32_t nvt_ts_resume(struct device *dev);
-extern int dsi_panel_lockdown_info_read(unsigned char *plockdowninfo);
 extern void dsi_panel_doubleclick_enable(bool on);
 uint32_t ENG_RST_ADDR  = 0x7FFF80;
 uint32_t SWRST_N8_ADDR = 0; //read from dtsi
@@ -1159,6 +1158,55 @@ static int32_t nvt_parse_dt(struct device *dev)
 	return 0;
 }
 #endif
+
+static bool nvt_cmds_panel_info(void)
+{
+	bool panel_id = false;
+	char display_node[37] = {'\0'};
+	char *match = (char *) strnstr(saved_command_line,
+								   "msm_drm.dsi_display0=",
+								strlen(saved_command_line));
+	if (match) {
+		memcpy(display_node, (match + strlen("msm_drm.dsi_display0=")),
+			   sizeof(display_node) - 1);
+		NVT_LOG("%s: display_node is %s\n", __func__, display_node);
+		if (!strncmp(display_node, "qcom,mdss_dsi_g7a_36_02_0c_dsc_video",
+			strlen("qcom,mdss_dsi_g7a_36_02_0a_dsc_video"))){
+			panel_id = true;
+			}else{
+				memcpy(display_node, (match + strlen("msm_drm.dsi_display0=")),
+					   sizeof(display_node) - 1);
+				NVT_LOG("%s: display_node is %s\n", __func__, display_node);
+		    if (!strncmp(display_node, "qcom,mdss_dsi_g7a_37_02_0a_dsc_video",
+			strlen("qcom,mdss_dsi_g7a_37_02_0a_dsc_video"))){
+			panel_id = true;
+		    }else{
+				memcpy(display_node, (match + strlen("msm_drm.dsi_display0=")),
+					   sizeof(display_node) - 1);
+				NVT_LOG("%s: display_node is %s\n", __func__, display_node);
+		    if (!strncmp(display_node, "qcom,mdss_dsi_g7a_37_02_0b_dsc_video",
+		    strlen("qcom,mdss_dsi_g7a_37_02_0b_dsc_video"))){
+			panel_id = true;
+		        }
+		    }
+	    }
+	}
+	return panel_id;
+}
+
+static inline int dsi_panel_lockdown_info_read(unsigned char *plockdowninfo)
+{
+	NVT_LOG("%s: lockdown panel is tianma\n", __func__);
+	plockdowninfo[0] = 0x46;
+	plockdowninfo[1] = 0x36;
+	plockdowninfo[2] = 0x32;
+	plockdowninfo[3] = 0x01;
+	plockdowninfo[4] = 0x47;
+	plockdowninfo[5] = 0x7b;
+	plockdowninfo[6] = 0x31;
+	plockdowninfo[7] = 0x00;
+	return 1;
+}
 
 static int nvt_get_panel_type(struct nvt_ts_data *ts_data)
 {
