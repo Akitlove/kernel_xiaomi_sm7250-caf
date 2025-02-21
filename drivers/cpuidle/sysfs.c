@@ -693,7 +693,7 @@ int cpuidle_add_sysfs(struct cpuidle_device *dev)
 	error = kobject_init_and_add(&kdev->kobj, &ktype_cpuidle, &cpu_dev->kobj,
 				   "cpuidle");
 	if (error) {
-        kobject_put(&kdrv->kobj);
+        kobject_put(&kdev->kobj);
 		kfree(kdev);
 		return error;
 	}
