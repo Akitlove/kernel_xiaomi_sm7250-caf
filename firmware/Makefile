@@ -10,16 +10,8 @@ fwabs := $(addprefix $(srctree)/,$(filter-out /%,$(fwdir)))$(filter /%,$(fwdir))
 
 fw-external-y := $(subst $(quote),,$(CONFIG_EXTRA_FIRMWARE))
 
-# There are three cases to care about:
-# 1. Building kernel with CONFIG_FIRMWARE_IN_KERNEL=y -- $(fw-shipped-y) should
-#    include the firmware files to include, according to .config
-# 2. 'make modules_install', which will install firmware for modules, and
-#    _also_ for the in-kernel drivers when CONFIG_FIRMWARE_IN_KERNEL=n
-# 3. 'make firmware_install', which installs all firmware, unconditionally.
 
-# For the former two cases we want $(fw-shipped-y) and $(fw-shipped-m) to be
-# accurate. In the latter case it doesn't matter -- it'll use $(fw-shipped-all).
-# But be aware that the config file might not be included at all.
+#fw-shipped-$(CONFIG_TOUCHSCREEN_NT36xxx_HOSTDL_SPI) += novatek_ts_fw.bin novatek_ts_mp.bin
 fw-shipped-$(CONFIG_TOUCHSCREEN_NT36xxx_HOSTDL_SPI) += novatek_nt36672c_g7a_fw01.bin novatek_nt36672c_g7a_mp01.bin
 fw-shipped-$(CONFIG_TOUCHSCREEN_NT36xxx_HOSTDL_SPI) += novatek_nt36672c_g7a_fw02.bin novatek_nt36672c_g7a_mp02.bin
 fw-shipped-$(CONFIG_TOUCHSCREEN_NT36xxx_HOSTDL_SPI) += novatek_nt36672c_g7a_fw03.bin novatek_nt36672c_g7a_mp03.bin
@@ -35,6 +27,7 @@ quiet_cmd_ihex2fw  = IHEX2FW $@
 
 quiet_cmd_h16tofw  = H16TOFW $@
       cmd_h16tofw  = $(objtree)/$(obj)/ihex2fw -w $< $@
+
 
 quiet_cmd_fwbin = MK_FW   $@
       cmd_fwbin = FWNAME="$(patsubst firmware/%.gen.S,%,$@)";		     \
