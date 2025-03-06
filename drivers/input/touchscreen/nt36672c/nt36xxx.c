@@ -1094,22 +1094,22 @@ static bool nvt_cmds_panel_info(void)
 		memcpy(display_node, (match + strlen("msm_drm.dsi_display0=")),
 			   sizeof(display_node) - 1);
 		NVT_LOG("%s: display_node is %s\n", __func__, display_node);
-		if (!strncmp(display_node, "qcom,mdss_dsi_g7a_36_02_0c_dsc_video",
-			strlen("qcom,mdss_dsi_g7a_36_02_0a_dsc_video"))){
+		if (!strncmp(display_node, "qcom,mdss_dsi_g7a_37_02_0a_dsc_video",
+			strlen("qcom,mdss_dsi_g7a_37_02_0a_dsc_video"))){
 			panel_id = true;
 			}else{
 				memcpy(display_node, (match + strlen("msm_drm.dsi_display0=")),
 					   sizeof(display_node) - 1);
 				NVT_LOG("%s: display_node is %s\n", __func__, display_node);
-		    if (!strncmp(display_node, "qcom,mdss_dsi_g7a_37_02_0a_dsc_video",
-			strlen("qcom,mdss_dsi_g7a_37_02_0a_dsc_video"))){
+		    if (!strncmp(display_node, "qcom,mdss_dsi_g7a_37_02_0b_dsc_video",
+			strlen("qcom,mdss_dsi_g7a_37_02_0b_dsc_video"))){
 			panel_id = true;
 		    }else{
 				memcpy(display_node, (match + strlen("msm_drm.dsi_display0=")),
 					   sizeof(display_node) - 1);
 				NVT_LOG("%s: display_node is %s\n", __func__, display_node);
-		    if (!strncmp(display_node, "qcom,mdss_dsi_g7a_37_02_0b_dsc_video",
-		    strlen("qcom,mdss_dsi_g7a_37_02_0b_dsc_video"))){
+		    if (!strncmp(display_node, "qcom,mdss_dsi_g7a_36_02_0c_dsc_video",
+		    strlen("qcom,mdss_dsi_g7a_36_02_0c_dsc_video"))){
 			panel_id = true;
 		        }
 		    }
@@ -1120,15 +1120,27 @@ static bool nvt_cmds_panel_info(void)
 
 static inline int dsi_panel_lockdown_info_read(unsigned char *plockdowninfo)
 {
-	NVT_LOG("%s: lockdown panel is tianma\n", __func__);
-	plockdowninfo[0] = 0x46;
-	plockdowninfo[1] = 0x36;
-	plockdowninfo[2] = 0x32;
-	plockdowninfo[3] = 0x01;
-	plockdowninfo[4] = 0x47;
-	plockdowninfo[5] = 0x7b;
-	plockdowninfo[6] = 0x31;
-	plockdowninfo[7] = 0x00;
+	if (nvt_cmds_panel_info()) {
+		NVT_LOG("%s: lockdown panel is tianma\n", __func__);
+		plockdowninfo[0] = 0x46;
+		plockdowninfo[1] = 0x36;
+		plockdowninfo[2] = 0x32;
+		plockdowninfo[3] = 0x01;
+		plockdowninfo[4] = 0x47;
+		plockdowninfo[5] = 0x7b;
+		plockdowninfo[6] = 0x31;
+		plockdowninfo[7] = 0x00;
+	} else {
+		NVT_LOG("%s: lockdown panel is tianma\n", __func__);
+		plockdowninfo[0] = 0x41;
+		plockdowninfo[1] = 0x37;
+		plockdowninfo[2] = 0x32;
+		plockdowninfo[3] = 0x01;
+		plockdowninfo[4] = 0x47;
+		plockdowninfo[5] = 0x7b;
+		plockdowninfo[6] = 0x31;
+		plockdowninfo[7] = 0x00;
+	}
 	return 1;
 }
 
