@@ -1,5 +1,4 @@
 /* Copyright (c) 2019-2020 The Linux Foundation. All rights reserved.
- * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -282,6 +281,7 @@ static int rmnet_shs_open_g_flows(struct inode *inode, struct file *filp)
 	rmnet_shs_wq_ep_unlock_bh();
 
 	return 0;
+
 fail:
 	rmnet_shs_wq_ep_unlock_bh();
 	rm_err("%s", "SHS_MEM: rmnet_shs_open - FAILED\n");
@@ -319,6 +319,7 @@ static int rmnet_shs_open_ss_flows(struct inode *inode, struct file *filp)
 	rmnet_shs_wq_ep_unlock_bh();
 
 	return 0;
+
 fail:
 	rmnet_shs_wq_ep_unlock_bh();
 	rm_err("%s", "SHS_MEM: rmnet_shs_open - FAILED\n");
