@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
- * Copyright (c) 2018-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2018-2021, The Linux Foundation. All rights reserved.
  * Copyright (C) 2021 XiaoMi, Inc.
  */
 
-#define DEBUG
 #include <linux/module.h>
 #include <linux/slab.h>
 #include <linux/platform_device.h>
@@ -1978,15 +1977,14 @@ static int wcd938x_get_logical_addr(struct swr_device *swr_dev)
 	int num_retry = NUM_ATTEMPTS;
 
 	do {
+		/* retry after 1ms */
+		usleep_range(1000, 1010);
 		ret = swr_get_logical_dev_num(swr_dev, swr_dev->addr, &devnum);
-		if (ret) {
-			dev_err(&swr_dev->dev,
-				"%s get devnum %d for dev addr %llx failed\n",
-				__func__, devnum, swr_dev->addr);
-			/* retry after 1ms */
-			usleep_range(1000, 1010);
-		}
 	} while (ret && --num_retry);
+	if (ret)
+		dev_err(&swr_dev->dev,
+			"%s get devnum %d for dev addr %llx failed\n",
+			__func__, devnum, swr_dev->addr);
 	swr_dev->dev_num = devnum;
 	return 0;
 }
