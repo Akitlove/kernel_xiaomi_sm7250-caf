@@ -2801,7 +2801,6 @@ void sock_init_data_uid(struct socket *sock, struct sock *sk, kuid_t uid)
 	}
 	sk->sk_uid	=	uid;
 
-	sk->pid_num		=	pid_nr_ns(task_tgid(current), &init_pid_ns);
 	rwlock_init(&sk->sk_callback_lock);
 	if (sk->sk_kern_sock)
 		lockdep_set_class_and_name(
