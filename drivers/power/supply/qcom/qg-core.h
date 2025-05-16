@@ -1,11 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0 */
 /*
-<<<<<<< HEAD
  * Copyright (c) 2018-2021 The Linux Foundation. All rights reserved.
-=======
- * Copyright (c) 2018-2020 The Linux Foundation. All rights reserved.
  * Copyright (C) 2021 XiaoMi, Inc.
->>>>>>> 13a726ac9f48 (Add drivers/power/ modifications)
  */
 
 #ifndef __QG_CORE_H__
@@ -191,11 +187,8 @@ struct qpnp_qg {
 	bool			tcss_active;
 	bool			fastcharge_mode_enabled;
 	bool			bass_active;
-<<<<<<< HEAD
 	bool			first_profile_load;
-=======
 	bool			shutdown_delay;
->>>>>>> 13a726ac9f48 (Add drivers/power/ modifications)
 	int			charge_status;
 	int			charge_type;
 	int			chg_iterm_ma;
