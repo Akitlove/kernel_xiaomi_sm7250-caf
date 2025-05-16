@@ -54,6 +54,7 @@ config SF_BINDER
 
 config MIUI_ZRAM_MEMORY_TRACKING
 	bool "Track zRam stats"
+	default y
 	depends on ZRAM
 	help
 	  With this feature, admin can track the state of zram
