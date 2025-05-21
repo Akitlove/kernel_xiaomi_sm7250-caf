@@ -2278,7 +2278,7 @@ static void change_pageblock_range(struct page *pageblock_page,
  * pageblocks.
  */
 static bool can_steal_fallback(unsigned int order, int start_mt, int fallback_type,
-								unsigned int start_order))
+								unsigned int start_order)
 {
 	/*
 	 * Leaving this order check is intended, although there is
