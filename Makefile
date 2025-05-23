@@ -376,7 +376,7 @@ KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
 CPP		= $(CC) -E
 ifneq ($(LLVM),)
 CC		= clang
-LD		= ld.lld
+LD              = ld.lld
 AR		= llvm-ar
 NM		= llvm-nm
 OBJCOPY		= llvm-objcopy
@@ -1939,3 +1939,5 @@ FORCE:
 # Declare the contents of the PHONY variable as phony.  We keep that
 # information in a variable so we can use it in if_changed and friends.
 .PHONY: $(PHONY)
+
+CFLAGS += -fPIC
