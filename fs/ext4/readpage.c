@@ -160,21 +160,9 @@ static bool bio_post_read_required(struct bio *bio)
  */
 static void mpage_end_io(struct bio *bio)
 {
+
 	if (bio_post_read_required(bio)) {
 		struct bio_post_read_ctx *ctx = bio->bi_private;
-	struct bio_vec *bv;
-	int i;
-
-	if (ext4_bio_encrypted(bio)) {
-		if (bio->bi_status) {
-			fscrypt_release_ctx(bio->bi_private);
-		} else {
-			fscrypt_enqueue_decrypt_bio(bio->bi_private, bio);
-			return;
-		}
-	}
-	bio_for_each_segment_all(bv, bio, i) {
-		struct page *page = bv->bv_page;
 
 		ctx->cur_step = STEP_INITIAL;
 		bio_post_read_processing(ctx);
