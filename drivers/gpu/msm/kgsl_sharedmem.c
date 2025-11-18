@@ -2,7 +2,6 @@
 /*
  * Copyright (c) 2002,2007-2021, The Linux Foundation. All rights reserved.
  * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
- * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #include <asm/cacheflush.h>
@@ -1053,6 +1052,7 @@ kgsl_sharedmem_page_alloc_user(struct kgsl_memdesc *memdesc,
 	unsigned int pcount = 0;
 	size_t len;
 	unsigned int align;
+	bool memwq_flush_done = false;
 
 	static DEFINE_RATELIMIT_STATE(_rs,
 					DEFAULT_RATELIMIT_INTERVAL,
@@ -1131,6 +1131,13 @@ kgsl_sharedmem_page_alloc_user(struct kgsl_memdesc *memdesc,
 		if (page_count <= 0) {
 			if (page_count == -EAGAIN)
 				continue;
+
+			/* if OoM, retry once after flushing mem_wq */
+			if (page_count == -ENOMEM && !memwq_flush_done) {
+				flush_workqueue(kgsl_driver.mem_workqueue);
+				memwq_flush_done = true;
+				continue;
+			}
 
 			/*
 			 * Update sglen and memdesc size,as requested allocation

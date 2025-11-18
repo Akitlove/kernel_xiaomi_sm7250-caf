@@ -2,7 +2,6 @@
 /*
  * Copyright (c) 2008-2021, The Linux Foundation. All rights reserved.
  * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All rights reserved.
- * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #include <uapi/linux/sched/types.h>
@@ -354,8 +353,7 @@ static void kgsl_destroy_anon(struct kgsl_memdesc *memdesc)
 	}
 }
 
-void
-kgsl_mem_entry_destroy(struct kref *kref)
+static void mem_entry_destroy(struct kgsl_mem_entry *entry)
 {
 	unsigned int memtype;
 
@@ -381,23 +379,25 @@ kgsl_mem_entry_destroy(struct kref *kref)
 static void _deferred_destroy(struct work_struct *work)
 {
 	struct kgsl_mem_entry *entry =
-	container_of(work, struct kgsl_mem_entry, work);
+		container_of(work, struct kgsl_mem_entry, work);
+
 	mem_entry_destroy(entry);
 }
 
 void kgsl_mem_entry_destroy(struct kref *kref)
 {
 	struct kgsl_mem_entry *entry =
-	container_of(kref, struct kgsl_mem_entry, refcount);
+		container_of(kref, struct kgsl_mem_entry, refcount);
+
 	mem_entry_destroy(entry);
 }
-
 EXPORT_SYMBOL(kgsl_mem_entry_destroy);
 
 void kgsl_mem_entry_destroy_deferred(struct kref *kref)
 {
 	struct kgsl_mem_entry *entry =
-	container_of(kref, struct kgsl_mem_entry, refcount);
+		container_of(kref, struct kgsl_mem_entry, refcount);
+
 	INIT_WORK(&entry->work, _deferred_destroy);
 	queue_work(kgsl_driver.mem_workqueue, &entry->work);
 }
@@ -5470,6 +5470,12 @@ void kgsl_device_platform_remove(struct kgsl_device *device)
 }
 EXPORT_SYMBOL(kgsl_device_platform_remove);
 
+static void
+_flush_mem_workqueue(struct work_struct *work)
+{
+	flush_workqueue(kgsl_driver.mem_workqueue);
+}
+
 static void kgsl_core_exit(void)
 {
 	kgsl_events_exit();
@@ -5572,6 +5578,8 @@ static int __init kgsl_core_init(void)
 
 	kgsl_driver.mem_workqueue = alloc_workqueue("kgsl-mementry",
 		WQ_UNBOUND | WQ_MEM_RECLAIM, 0);
+
+	INIT_WORK(&kgsl_driver.mem_work, _flush_mem_workqueue);
 
 	kthread_init_worker(&kgsl_driver.worker);
 

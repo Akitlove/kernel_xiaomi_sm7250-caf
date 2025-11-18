@@ -2,7 +2,6 @@
 /*
  * Copyright (c) 2011-2021, The Linux Foundation. All rights reserved.
  * Copyright (c) 2022-2024, Qualcomm Innovation Center, Inc. All rights reserved.
- * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #include <linux/compat.h>
@@ -2517,7 +2516,7 @@ static int kgsl_iommu_get_gpuaddr(struct kgsl_pagetable *pagetable,
 {
 	struct kgsl_iommu_pt *pt = pagetable->priv;
 	int ret = 0;
-	uint64_t addr, start, end, size;
+	u64 start, end, size;
 	unsigned int align;
 
 	if (WARN_ON(kgsl_memdesc_use_cpu_map(memdesc)))
@@ -2547,23 +2546,13 @@ static int kgsl_iommu_get_gpuaddr(struct kgsl_pagetable *pagetable,
 	if (kgsl_memdesc_is_secured(memdesc))
 		start += secure_global_size;
 
-	spin_lock(&pagetable->lock);
-
-	addr = _get_unmapped_area(pagetable, start, end, size, align);
-
-	if (addr == (uint64_t) -ENOMEM) {
-		ret = -ENOMEM;
-		goto out;
+	ret = get_gpuaddr(pagetable, memdesc, start, end, size, align);
+	/* if OoM, retry once after flushing mem_wq */
+	if (ret == -ENOMEM) {
+		flush_workqueue(kgsl_driver.mem_workqueue);
+		ret = get_gpuaddr(pagetable, memdesc, start, end, size, align);
 	}
 
-	ret = _insert_gpuaddr(pagetable, addr, size);
-	if (ret == 0) {
-		memdesc->gpuaddr = addr;
-		memdesc->pagetable = pagetable;
-	}
-
-out:
-	spin_unlock(&pagetable->lock);
 	return ret;
 }
 
