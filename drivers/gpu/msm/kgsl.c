@@ -354,7 +354,8 @@ static void kgsl_destroy_anon(struct kgsl_memdesc *memdesc)
 	}
 }
 
-static void mem_entry_destroy(struct kgsl_mem_entry *entry)
+void
+kgsl_mem_entry_destroy(struct kref *kref)
 {
 	unsigned int memtype;
 
@@ -363,16 +364,16 @@ static void mem_entry_destroy(struct kgsl_mem_entry *entry)
 
 	if (!(entry->memdesc.flags & KGSL_MEMFLAGS_SPARSE_VIRT))
 		kgsl_process_sub_stats(entry->priv, memtype,
-							   entry->memdesc.size);
+			entry->memdesc.size);
 
-		/* Detach from process list */
-		kgsl_mem_entry_detach_process(entry);
+	/* Detach from process list */
+	kgsl_mem_entry_detach_process(entry);
 
 	if (memtype != KGSL_MEM_ENTRY_KERNEL)
 		atomic_long_sub(entry->memdesc.size,
-						&kgsl_driver.stats.mapped);
+			&kgsl_driver.stats.mapped);
 
-		kgsl_sharedmem_free(&entry->memdesc);
+	kgsl_sharedmem_free(&entry->memdesc);
 
 	kfree(entry);
 }
